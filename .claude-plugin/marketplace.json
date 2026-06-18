@@ -1,0 +1,35 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "bsas-skills",
+  "owner": {
+    "name": "Bassel Al-Sayed"
+  },
+  "metadata": {
+    "description": "Bassel Al-Sayed's shareable Claude Code agent skills.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "bsas-skills",
+      "source": ".",
+      "description": "A bundle of Bassel Al-Sayed's reusable Claude Code agent skills.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Bassel Al-Sayed"
+      },
+      "homepage": "https://github.com/basselalsayed/bsas-skills",
+      "repository": "https://github.com/basselalsayed/bsas-skills",
+      "license": "MIT",
+      "keywords": [
+        "skills",
+        "claude-code",
+        "agent",
+        "automation"
+      ],
+      "category": "productivity",
+      "skills": [
+        "./skills/example-skill"
+      ]
+    }
+  ]
+}

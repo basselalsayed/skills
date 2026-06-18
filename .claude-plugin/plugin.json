@@ -1,0 +1,20 @@
+{
+  "name": "bsas-skills",
+  "version": "0.1.0",
+  "description": "A bundle of Bassel Al-Sayed's reusable Claude Code agent skills.",
+  "author": {
+    "name": "Bassel Al-Sayed"
+  },
+  "homepage": "https://github.com/basselalsayed/bsas-skills",
+  "repository": "https://github.com/basselalsayed/bsas-skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "claude-code",
+    "agent",
+    "automation"
+  ],
+  "skills": [
+    "./skills/example-skill"
+  ]
+}

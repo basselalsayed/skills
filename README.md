@@ -1,0 +1,71 @@
+# bsas-skills
+
+Bassel Al-Sayed's shareable [Claude Code](https://code.claude.com) agent skills.
+Each skill lives in its own folder and is installable two ways: as a Claude Code
+**plugin marketplace**, or via the **`npx skills`** CLI.
+
+## Install
+
+### Option A — Claude Code plugin marketplace (gets all skills)
+
+In Claude Code:
+
+```
+/plugin marketplace add basselalsayed/bsas-skills
+/plugin install bsas-skills@bsas-skills
+```
+
+This installs the whole bundle as one plugin.
+
+### Option B — `npx skills` ([vercel-labs/skills](https://github.com/vercel-labs/skills))
+
+```sh
+# List available skills
+npx skills add basselalsayed/bsas-skills --list
+
+# Install everything
+npx skills add basselalsayed/bsas-skills
+
+# Install one skill, targeting Claude Code
+npx skills add basselalsayed/bsas-skills --skill example-skill -a claude-code
+```
+
+## Repository layout
+
+```
+bsas-skills/
+├── .claude-plugin/
+│   ├── marketplace.json   # marketplace listing the bundle plugin
+│   └── plugin.json        # the "bsas-skills" plugin; skills[] generated
+├── skills/
+│   └── <skill-name>/
+│       └── SKILL.md       # one folder per skill
+└── scripts/
+    └── sync-skills.mjs    # regenerates skills[] from skills/
+```
+
+The `skills/<name>/SKILL.md` layout is what both Claude's marketplace and
+`npx skills` discover, so each skill has a single copy on disk serving both
+install paths.
+
+## Add a new skill
+
+1. Copy `skills/example-skill/` to `skills/<your-skill-name>/`.
+2. Edit the YAML frontmatter — `name` (must match the folder) and `description`
+   are required; `allowed-tools` is optional.
+3. Write the skill body (what it does, when to use it, steps, examples).
+4. Register it in the manifests:
+   ```sh
+   node scripts/sync-skills.mjs
+   ```
+5. Commit and push.
+
+To verify manifests are in sync (e.g. in CI):
+
+```sh
+node scripts/sync-skills.mjs --check
+```
+
+## License
+
+[MIT](./LICENSE) © Bassel Al-Sayed
