@@ -51,6 +51,7 @@ class GetCommentUseCase:
 
 - Use `get_translations_batch` when loading lists to avoid N+1 queries
 - `TranslationOverlayService` falls back to English if no translation exists — never raises
+- To *generate* translations from an external provider, go through a translation gateway (port + adapter) — see [gateways.md](gateways.md)
 
 ## Writing translations
 

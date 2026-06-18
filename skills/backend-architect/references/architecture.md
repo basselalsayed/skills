@@ -63,7 +63,7 @@ class CreateTweetUseCase:
 
 Wire in `di.py` — interfaces map to concretes, Lagom auto-resolves constructor deps at runtime.
 
-The DI container knows about: `async_sessionmaker[AsyncSession]`, mappers, domain services, external gateways, the UoW itself, and use cases. **Repositories are NOT wired in DI** — they are only constructible through `UnitOfWork.__aenter__` (see [data-access.md](data-access.md)).
+The DI container knows about: `async_sessionmaker[AsyncSession]`, mappers, domain services, external gateways, the UoW itself, and use cases. **Repositories are NOT wired in DI** — they are only constructible through `UnitOfWork.__aenter__` (see [data-access.md](data-access.md)). For wiring external integrations (and the gateways-vs-repos-in-DI distinction), see [gateways.md](gateways.md).
 
 ```python
 DI[UnitOfWorkInterface] = UnitOfWork
