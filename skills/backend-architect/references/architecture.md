@@ -94,6 +94,8 @@ Async callable classes that orchestrate domain logic:
 - Wrap ALL DB work in `async with self.uow:`
 - Receive already-authorized entities from router deps, not raw IDs + user_id
 
+For the `__call__` calling convention, router call sites, and full rules, see [use-cases.md](use-cases.md).
+
 ## Configuration
 
 All env var access is centralized in the `__Config` singleton in `config.py`. Direct `os.getenv` calls outside that class are forbidden.

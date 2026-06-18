@@ -68,7 +68,7 @@ async def _process_batch_async(uow_factory, ids):
 
 ## Repository Pattern
 
-Repositories extend `BaseRepository[ModelType, EntityType, MapperType]` and implement a domain interface. Must define `get_entity_key`, `get_model_key`, `_get_existing_models_by_key`. All methods are `async def`.
+Repositories extend `BaseRepository[ModelType, EntityType, MapperType]` and implement a domain interface. Must define `get_entity_key`, `get_model_key`, `_get_existing_models_by_key`. All methods are `async def`. For the full base-class API (inherited CRUD, the abstract contract, `BaseMapper`, and the join-table `BaseTableRepository`), see [base-repositories.md](base-repositories.md).
 
 ### Aggregate ownership
 

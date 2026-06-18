@@ -62,6 +62,8 @@ Read the relevant file before implementing — each holds the detailed rules and
 | --- | --- |
 | Layer structure, async rules, dependency inversion, DI (Lagom), use cases, configuration | [references/architecture.md](references/architecture.md) |
 | Unit of Work, repository pattern, aggregate ownership, background tasks | [references/data-access.md](references/data-access.md) |
+| Base repository classes (inherited CRUD, abstract contract, `BaseMapper`, join tables) | [references/base-repositories.md](references/base-repositories.md) |
+| Use cases — async callable classes, the `__call__` convention | [references/use-cases.md](references/use-cases.md) |
 | External API gateways (ports & adapters), DI wiring, provider swapping | [references/gateways.md](references/gateways.md) |
 | Router conventions, request body schemas (`BaseParams` vs `BaseSchema`), authorization dependencies | [references/api-layer.md](references/api-layer.md) |
 | Localisation / i18n / l10n system | [references/localisation.md](references/localisation.md) |
