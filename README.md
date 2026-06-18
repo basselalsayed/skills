@@ -1,4 +1,4 @@
-# bsas-skills
+# skills
 
 Bassel Al-Sayed's shareable [Claude Code](https://code.claude.com) agent skills.
 Each skill lives in its own folder and is installable two ways: as a Claude Code
@@ -11,8 +11,8 @@ Each skill lives in its own folder and is installable two ways: as a Claude Code
 In Claude Code:
 
 ```
-/plugin marketplace add basselalsayed/bsas-skills
-/plugin install bsas-skills@bsas-skills
+/plugin marketplace add basselalsayed/skills
+/plugin install skills@skills
 ```
 
 This installs the whole bundle as one plugin.
@@ -21,22 +21,22 @@ This installs the whole bundle as one plugin.
 
 ```sh
 # List available skills
-npx skills add basselalsayed/bsas-skills --list
+npx skills add basselalsayed/skills --list
 
 # Install everything
-npx skills add basselalsayed/bsas-skills
+npx skills add basselalsayed/skills
 
 # Install one skill, targeting Claude Code
-npx skills add basselalsayed/bsas-skills --skill example-skill -a claude-code
+npx skills add basselalsayed/skills --skill example-skill -a claude-code
 ```
 
 ## Repository layout
 
 ```
-bsas-skills/
+skills/
 ├── .claude-plugin/
 │   ├── marketplace.json   # marketplace listing the bundle plugin
-│   └── plugin.json        # the "bsas-skills" plugin; skills[] generated
+│   └── plugin.json        # the "skills" plugin; skills[] generated
 ├── skills/
 │   └── <skill-name>/
 │       └── SKILL.md       # one folder per skill

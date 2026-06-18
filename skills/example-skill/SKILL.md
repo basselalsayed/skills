@@ -11,7 +11,7 @@ allowed-tools:
 # Example Skill
 
 This is a starter skill that doubles as the authoring template for the
-`bsas-skills` repo. Delete this content and replace it with your own when you
+`skills` repo. Delete this content and replace it with your own when you
 copy the folder.
 
 ## Frontmatter reference
