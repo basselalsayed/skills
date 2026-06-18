@@ -28,6 +28,7 @@
       ],
       "category": "productivity",
       "skills": [
+        "./skills/backend-architect",
         "./skills/example-skill"
       ]
     }

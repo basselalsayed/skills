@@ -48,6 +48,18 @@ The `skills/<name>/SKILL.md` layout is what both Claude's marketplace and
 `npx skills` discover, so each skill has a single copy on disk serving both
 install paths.
 
+## Available skills
+
+| Skill | What it does |
+| --- | --- |
+| `backend-architect` | Enforces clean-architecture (SOLID/DIP) patterns for an async FastAPI backend — use cases, repositories, Unit of Work, DI, i18n, tests. |
+| `example-skill` | Template + authoring reference for creating new skills in this repo. |
+
+`backend-architect` is also this repo's example of **progressive disclosure**: a
+lean `SKILL.md` index plus `references/*.md` files that Claude loads only when a
+given concern is relevant — the recommended pattern for any skill whose content
+grows past a page.
+
 ## Add a new skill
 
 1. Copy `skills/example-skill/` to `skills/<your-skill-name>/`.

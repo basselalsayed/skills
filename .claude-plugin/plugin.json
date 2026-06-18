@@ -15,6 +15,7 @@
     "automation"
   ],
   "skills": [
+    "./skills/backend-architect",
     "./skills/example-skill"
   ]
 }
