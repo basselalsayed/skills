@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Architect"
+  short_description: "Build clean asynchronous Python backends"
+  default_prompt: "Use $backend-architect to implement this backend change with the established architecture and conventions."

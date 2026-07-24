@@ -54,11 +54,28 @@ install paths.
 | --- | --- |
 | `backend-architect` | Enforces clean architecture for async Python backends — HTTP/Celery/CLI entrypoints, Dishka DI, atomic use cases, workflows, JWT auth, repositories, Unit of Work, i18n, and tests. |
 | `example-skill` | Template + authoring reference for creating new skills in this repo. |
+| `frontend-developer` | Enforces FSD, NativeWind, generated API, i18n, typed state, utility, and persistence patterns for React Native frontends. |
 
 `backend-architect` is also this repo's example of **progressive disclosure**: a
 lean `SKILL.md` index plus `references/*.md` files that Claude loads only when a
 given concern is relevant — the recommended pattern for any skill whose content
 grows past a page.
+
+## Available agents
+
+The Claude Code plugin includes developer and read-only reviewer agents that
+preload the corresponding skill:
+
+| Agent | Role |
+| --- | --- |
+| `backend-developer` | Implements backend changes using `backend-architect`. |
+| `backend-reviewer` | Reviews backend changes without editing files. |
+| `frontend-developer` | Implements mobile frontend changes using `frontend-developer`. |
+| `frontend-reviewer` | Reviews mobile frontend changes without editing files. |
+
+Each skill also carries `agents/openai.yaml`, the Codex UI metadata for that
+skill. Claude Code subagent definitions live in the plugin-root `agents/`
+directory, as required by the plugin format.
 
 ## Add a new skill
 

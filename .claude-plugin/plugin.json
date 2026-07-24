@@ -16,6 +16,7 @@
   ],
   "skills": [
     "./skills/backend-architect",
-    "./skills/example-skill"
+    "./skills/example-skill",
+    "./skills/frontend-developer"
   ]
 }

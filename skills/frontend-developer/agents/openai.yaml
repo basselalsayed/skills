@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Developer"
+  short_description: "Build consistent React Native mobile frontends"
+  default_prompt: "Use $frontend-developer to implement this React Native frontend change with the established architecture and conventions."
