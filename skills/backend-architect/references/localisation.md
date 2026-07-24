@@ -7,28 +7,49 @@ The backend has a full i18n/l10n system. All new features with user-visible cont
 - **Canonical content** is stored in English on entity models (`tweets.text`, `tags.name`, etc.)
 - **Translations** are stored in the `content_translations` EAV table (`entity_type`, `entity_id`, `field_name`, `language_code`, `value`)
 - **Language resolution** is done by `LocaleMiddleware` → `request.state.locale` (priority: `x-locale` header → `Accept-Language` → `"en"`)
-- **User preference** overrides request locale via `user.preferred_language_code`
+- **User preference** may override request locale via the non-authoritative
+  `Principal.preferred_locale` claim
 
 ## Locale injection in routers
 
 Always inject `UserLocale` (not `Locale`) in endpoints returning user-visible entities:
 
 ```python
-from app.routers.dependencies import UserLocale
+from typing import Annotated
+
+from dishka.integrations.fastapi import FromDishka
+from fastapi import Depends, Request
+
+from app.entrypoints.http.dependencies import AuthenticatedPrincipal
+
+
+def get_user_locale(
+    request: Request,
+    principal: AuthenticatedPrincipal,
+) -> str:
+    return principal.preferred_locale or request.state.locale
+
+
+UserLocale = Annotated[str, Depends(get_user_locale)]
 
 @router.get("/{id}", response_model=CommentEntity, operation_id="getComment")
 async def get_comment(
     id: str,
-    user: AuthenticatedUser,
+    principal: AuthenticatedPrincipal,
     locale: UserLocale,  # ✅ respects user preference
-    use_case: GetCommentUseCase = FASTAPI_DI.depends(GetCommentUseCase),
-    i18n: I18nServiceInterface = FASTAPI_DI.depends(I18nServiceInterface),
+    use_case: FromDishka[GetCommentUseCase],
+    i18n: FromDishka[I18nServiceInterface],
 ):
     result = await use_case(id, locale)
     if not result:
         http_exc.not_found(i18n, locale, "errors.comment_not_found")
     return result
 ```
+
+Locale preference may remain stale until the access token is renewed; this is
+normally acceptable because it is not a security decision. If a flow requires
+the immediately current preference, load it explicitly inside that flow's use
+case rather than turning authentication into a full-user database lookup.
 
 ## Fetching and applying translations in use cases
 
@@ -81,5 +102,5 @@ Add seed data for new entity types in your seeds module, following the existing 
 
 ## Tests
 
-- Set `preferred_language_code` on user fixtures when testing localised endpoints
+- Set `preferred_locale` on principal fixtures when testing localised endpoints
 - Assert translated field values are returned (not the English canonical value) when a non-`"en"` locale is used

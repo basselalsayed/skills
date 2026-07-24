@@ -10,7 +10,8 @@ ALL database access MUST go through the Unit of Work.
 - On `__aexit__`: auto-commits on success, auto-rollbacks on exception, **closes** the session, and **deletes all repo attribute references** so any post-exit access raises `AttributeError` fast
 - Use cases and services MUST NEVER call `commit()` or `rollback()` manually
 - **`self.uow.X` (e.g. `self.uow.tweets`) only exists between `__aenter__` and `__aexit__`** — accessing repos outside the block raises `AttributeError` by design
-- Repositories are NOT in DI and are NOT injectable directly — they are only accessible via `self.uow.<repo_name>` inside an active context
+- Repositories have no Dishka providers and are NOT injectable directly — they are only accessible via `self.uow.<repo_name>` inside an active context
+- The UoW may be cached at Dishka `Scope.REQUEST`, but one DB-backed use-case invocation enters it exactly once and receives a fresh session
 
 ```python
 class CreateTweetUseCase:
@@ -18,7 +19,8 @@ class CreateTweetUseCase:
         self.uow = uow
         self.tweet_service = tweet_service
 
-    async def __call__(self, body: CreateTweetParams, user: UserEntity) -> TweetEntity:
+    async def __call__(self, body: CreateTweetParams, actor_id: UUID) -> TweetEntity:
+        tweet_entity = self.tweet_service.create_entity(body, actor_id)
         async with self.uow:
             tag_entities = [await self.uow.tags.get_or_create(t) for t in body.tags]
             mention_entities = [
@@ -45,26 +47,46 @@ second_tweet = await self.uow.tweets.get(other_id)  # AttributeError
 session.execute(select(TweetModel))
 ```
 
-### Multiple `async with` blocks
+### One transaction per use case
 
-Multiple `async with self.uow:` blocks across a long-running operation are a code smell. They usually mean either (a) authz retrieval that should move to a router dep, or (b) the use case is doing too much. Acceptable exceptions:
+A DB-backed use case contains exactly one `async with self.uow:` block. Load,
+authorize, mutate, and persist the operation in that block. Do not enter the UoW
+twice, and do not hide extra transactions in a domain service.
 
-- Background batchers that release a connection between external API calls
-- Use cases with intentional async work (e.g. AI calls) between two separate transactions
+When an operation needs multiple commits, batch/chunk boundaries, or a slow
+external call between database steps, split the steps into separate atomic use
+cases and coordinate them with a workflow. See [workflows.md](workflows.md).
 
 ### Background tasks
 
-Background/Celery tasks are sync at the top level. Acquire a fresh UoW per chunk via a `Callable[[], UnitOfWorkInterface]` factory — do not share a UoW instance across chunks:
+Celery tasks are sync at the top level and receive a request-scoped async use
+case or workflow from Dishka. Bridge to async once at the boundary. Batch jobs
+use a workflow that invokes one atomic use case per chunk:
 
 ```python
-# ✅ Pattern for any background task module
-def process_batch(uow_factory: Callable[[], UnitOfWorkInterface], ids: list[str]) -> None:
-    asyncio.run(_process_batch_async(uow_factory, ids))
+# ✅ entrypoints/celery/tasks/tweets.py
+@celery_app.task
+def process_batch(
+    ids: list[str],
+    workflow: FromDishka[ProcessTweetBatchWorkflow],
+) -> None:
+    asyncio.run(workflow(ids))
 
-async def _process_batch_async(uow_factory, ids):
-    async with uow_factory() as uow:
-        ...
+
+# ✅ domain/workflows/process_tweet_batch.py
+async def __call__(self, ids: list[str]) -> None:
+    for chunk in batched(ids, 100):
+        await self.process_chunk(chunk)
+
+
+# ✅ domain/use_cases/tweet/process_tweet_chunk.py
+async def __call__(self, ids: list[str]) -> None:
+    async with self.uow:
+        await self.uow.tweets.process(ids)
 ```
+
+The workflow never receives the UoW or repositories. Each use-case call owns its
+transaction. See [entrypoints.md](entrypoints.md) for Celery container setup.
 
 ## Repository Pattern
 

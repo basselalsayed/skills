@@ -52,7 +52,7 @@ install paths.
 
 | Skill | What it does |
 | --- | --- |
-| `backend-architect` | Enforces clean-architecture (SOLID/DIP) patterns for an async FastAPI backend — use cases, repositories, Unit of Work, DI, i18n, tests. |
+| `backend-architect` | Enforces clean architecture for async Python backends — HTTP/Celery/CLI entrypoints, Dishka DI, atomic use cases, workflows, JWT auth, repositories, Unit of Work, i18n, and tests. |
 | `example-skill` | Template + authoring reference for creating new skills in this repo. |
 
 `backend-architect` is also this repo's example of **progressive disclosure**: a

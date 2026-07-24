@@ -1,11 +1,13 @@
-# API layer: routers, request schemas, authorization
+# HTTP API entrypoint: routers, request schemas, authorization
 
 ## Router Conventions
 
+- Keep routers under `entrypoints/http/routers/`; never create a top-level `routers/` package
+- Construct each `APIRouter` with `route_class=DishkaRoute`
 - Every endpoint MUST have `response_model` and `operation_id` (camelCase) — these drive OpenAPI / client-SDK generation
 - Define `responses` dict for error models at both router and endpoint level
-- Auth via `AuthenticatedUser` dependency or router-level `dependencies=[Depends(get_current_user)]`
-- Request handlers should consume **at most one primary use case**. The only acceptable second dependency is an authz-style retrieval (see Authorization Dependencies below)
+- Authenticate via the `AuthenticatedPrincipal` dependency; never pass a raw JWT or framework security object into a use case
+- Request handlers consume **one primary application operation**: an atomic use case or a workflow. Perform resource authorization inside an atomic use case's UoW.
 
 ## Request Body Schemas
 
@@ -26,24 +28,24 @@ class TweetSuggestionSchema(BaseSchema):
     reasoning: str
 ```
 
-## Authorization Dependencies
+## Authentication and authorization
 
-Authz lives in router deps, not inside use cases. Typed FastAPI deps like `OwnedTweet` and `OwnedComment`:
-
-- Resolve a path param (`tweet_id`, `comment_id`) into the typed entity
-- Return 404 (not 403) if the resource doesn't exist OR isn't owned by the current user — existence is never leaked
-
-Use cases receive the already-authorized **entity**, not `(id, user_id)`.
+The HTTP dependency validates the bearer JWT and converts its trusted claims into
+an immutable `Principal`. It does not load an owned entity:
 
 ```python
-OwnedTweet = Annotated[TweetEntity, Depends(authorize_owned_tweet)]
-
 @router.get("/{tweet_id}", response_model=TweetEntity, operation_id="getTweet")
 async def get_tweet(
-    tweet: OwnedTweet,
-    use_case: GetTweetUseCase = FASTAPI_DI.depends(GetTweetUseCase),
-):
-    return await use_case(tweet)
+    tweet_id: UUID,
+    principal: AuthenticatedPrincipal,
+    use_case: FromDishka[GetTweetUseCase],
+) -> TweetEntity:
+    return await use_case(tweet_id=tweet_id, actor_id=principal.actor_id)
 ```
 
-Keep `Owned*` deps in your resource router's dependencies module (or inline in the router for a single resource). Authz retrievals are the only acceptable "second use case" in a handler — and even then, prefer making them a dep.
+Load the resource and enforce ownership/permissions inside the same UoW used for
+the business operation. Return the same application-level not-found result for a
+missing or unauthorized owned resource when existence must not be disclosed.
+Keep the reusable principal dependency in `entrypoints/http/dependencies.py`.
+See [authentication-authorization.md](authentication-authorization.md) for JWT
+validation, token freshness, and critical-flow rules.
