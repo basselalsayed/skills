@@ -1,0 +1,35 @@
+{
+  "name": "skills",
+  "version": "0.2.0",
+  "description": "Reusable backend and React Native development and review workflows for Codex and Claude Code.",
+  "author": {
+    "name": "Bassel Al-Sayed",
+    "url": "https://github.com/basselalsayed"
+  },
+  "homepage": "https://github.com/basselalsayed/skills",
+  "repository": "https://github.com/basselalsayed/skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "codex",
+    "claude-code",
+    "backend",
+    "react-native",
+    "code-review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Backend and Frontend Skills",
+    "shortDescription": "Backend and React Native development workflows",
+    "longDescription": "Architecture guidance and focused implementation and review workflows for asynchronous Python backends and React Native applications.",
+    "developerName": "Bassel Al-Sayed",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Backend development",
+      "React Native development",
+      "Code review"
+    ],
+    "websiteURL": "https://github.com/basselalsayed/skills",
+    "defaultPrompt": "Use the appropriate backend or frontend skill to implement or review this change."
+  }
+}

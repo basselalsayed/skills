@@ -1,7 +1,7 @@
 {
   "name": "skills",
-  "version": "0.1.0",
-  "description": "A bundle of Bassel Al-Sayed's reusable Claude Code agent skills.",
+  "version": "0.2.0",
+  "description": "Reusable backend and React Native skills with dedicated developer and read-only reviewer agents.",
   "author": {
     "name": "Bassel Al-Sayed"
   },
@@ -12,11 +12,18 @@
     "skills",
     "claude-code",
     "agent",
+    "code-review",
     "automation"
   ],
   "skills": [
     "./skills/backend-architect",
     "./skills/example-skill",
     "./skills/frontend-developer"
+  ],
+  "agents": [
+    "./agents/backend-developer.md",
+    "./agents/backend-reviewer.md",
+    "./agents/frontend-developer.md",
+    "./agents/frontend-reviewer.md"
   ]
 }
