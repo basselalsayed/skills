@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rebase"
+  short_description: "Safely analyze and integrate Git branches"
+  default_prompt: "Use $rebase to safely integrate origin/feature-2 into my current branch."

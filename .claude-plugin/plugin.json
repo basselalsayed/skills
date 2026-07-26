@@ -18,7 +18,8 @@
   "skills": [
     "./skills/backend-architect",
     "./skills/example-skill",
-    "./skills/frontend-developer"
+    "./skills/frontend-developer",
+    "./skills/rebase"
   ],
   "agents": [
     "./agents/backend-developer.md",

@@ -73,6 +73,7 @@ The `skills/<name>/SKILL.md` layout is shared by Claude Code, Codex, and
 | `backend-architect` | Enforces clean architecture for async Python backends — HTTP/Celery/CLI entrypoints, Dishka DI, atomic use cases, workflows, JWT auth, repositories, Unit of Work, i18n, and tests. |
 | `example-skill` | Template + authoring reference for creating new skills in this repo. |
 | `frontend-developer` | Enforces FSD, NativeWind, generated API, i18n, typed state, utility, and persistence patterns for React Native frontends. |
+| `rebase` | Safely analyzes branch histories, chooses rebase or merge, protects the starting state, handles conflicts, and verifies the integration. |
 
 `backend-architect` is also this repo's example of **progressive disclosure**: a
 lean `SKILL.md` index plus `references/*.md` files that Claude loads only when a
