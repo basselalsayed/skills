@@ -1,6 +1,6 @@
 ---
 name: backend-architect
-description: "Expert guide for Python FastAPI backend work that enforces clean architecture (SOLID, DIP), explicit HTTP/Celery/CLI entrypoints, atomic use cases, higher-level workflows, and a layered async codebase. Use for tasks involving domain logic, use cases, workflows, repositories, mappers, Dishka dependency injection, Unit of Work, SQLAlchemy 2.x async models, API routers, JWT authentication, token rotation, principal-based authorization, background tasks, operational commands, localisation/i18n, configuration, and backend tests. Triggers on: FastAPI, Celery, CLI, Helm hook, Alembic, JWT, authentication, authorization, principal, refresh token, clean architecture, use case, workflow, repository, unit of work, Dishka, dependency injection, SQLAlchemy async, domain layer, router, backend test."
+description: "Expert guide for async Python and FastAPI backends using clean architecture (SOLID, DIP), Dishka, SQLAlchemy Unit of Work, explicit HTTP/Celery/CLI/Temporal entrypoints, atomic use cases, application workflows, and durable execution. Use for domain logic, repositories, mappers, dependency injection, APIs and authorization, background work, i18n, configuration, migrations, and backend tests. Also use for Temporal Python SDK workflows, activities, workers, task queues, workflow sandbox determinism, replay, history-safe payloads, retries, cancellation, heartbeats, Worker Versioning, and outbox dispatch. Triggers on: FastAPI, Temporal, Celery, CLI, Alembic, JWT, clean architecture, use case, workflow, activity, worker, repository, Unit of Work, Dishka, SQLAlchemy async, router, and backend test."
 allowed-tools:
   - Read
   - Edit
@@ -57,6 +57,11 @@ src/app/
 │   ├── celery/
 │   │   ├── app.py
 │   │   └── tasks/
+│   ├── temporal/
+│   │   ├── worker.py
+│   │   ├── activities/
+│   │   ├── workflows/
+│   │   └── dtos.py
 │   └── cli/
 └── di.py                      # Composition-root facade
 ```
@@ -75,6 +80,7 @@ src/app/
 10. **Tests accompany every change.** Use async tests for async code (`pytest-asyncio`, `asyncio_mode = "auto"`), allow sync tests for sync-only boundary wrappers, mirror source structure, and use factories.
 11. **Entrypoints stay thin.** HTTP, Celery, and CLI code parses inputs, resolves dependencies, invokes one application operation (a use case or workflow), and translates outputs; business logic never lives at the boundary.
 12. **Authenticate at the boundary; authorize in the use case.** Validate JWTs into immutable `Principal` values in FastAPI dependencies. Enforce resource authorization with current database state inside the use case's UoW.
+13. **Keep Temporal deterministic and isolated.** Put SDK-decorated workflows under `entrypoints/temporal/`, never `domain/`; workflows orchestrate deterministic history only, activities perform I/O through application operations, and every workflow change is replay-safe. Read the Temporal reference before changing a worker, workflow, activity, outbox dispatcher, retry policy, or deployment version.
 
 ## Reference index
 
@@ -88,6 +94,8 @@ Read the relevant file before implementing — each holds the detailed rules and
 | Base repository classes (inherited CRUD, abstract contract, `BaseMapper`, join tables) | [references/base-repositories.md](references/base-repositories.md) |
 | Atomic use cases — one operation, one UoW transaction, the `__call__` convention | [references/use-cases.md](references/use-cases.md) |
 | Workflows — multi-step orchestration, slow external calls, retries, and outbox boundaries | [references/workflows.md](references/workflows.md) |
+| Temporal architecture, determinism, worker DI, outbox dispatch, cancellation, replay, and operations | [references/temporal.md](references/temporal.md) |
+| Temporal Python SDK implementation shapes (load only while coding adapters) | [references/temporal/python-patterns.md](references/temporal/python-patterns.md) |
 | External API gateways (ports & adapters), DI wiring, provider swapping | [references/gateways.md](references/gateways.md) |
 | HTTP router conventions, request body schemas (`BaseParams` vs `BaseSchema`), principal injection | [references/api-layer.md](references/api-layer.md) |
 | JWT validation, principal construction, token state, and resource authorization | [references/authentication-authorization.md](references/authentication-authorization.md) |
