@@ -17,23 +17,30 @@ item under `docs/todos/`, deleted when the work ships.
 
 ## First use (run before the task)
 
-1. Collect guidance-file candidates at the repo root: `AGENTS.md`, `CLAUDE.md`,
-   `.claude/CLAUDE.md`. Resolve symlinks; files that resolve to the same file or
-   have identical content count as one target. Always edit the resolved
-   target; never replace a symlink with a file.
-2. If the marker `<!-- docs-todo -->` is present in **any** candidate,
-   continue with the task. Ask nothing.
-3. Otherwise ask once per skill per session: "Add the `docs-todo` pointer to
-   your agent guidance file?" Offer one option per distinct target, listing
-   its aliases in the option description (e.g. "`AGENTS.md` (also
-   `.claude/CLAUDE.md`)"), plus *Not now*. Use `AskUserQuestion` when the host
-   provides it; otherwise ask in one plain sentence and wait.
-4. On insert: follow [references/agents-md-row.md](references/agents-md-row.md).
-   In the resolved target file, create the
+1. Collect guidance-file candidates at the repo root: `AGENTS.md`, `CLAUDE.md`
+   (and `.claude/CLAUDE.md`), plus any other agent file the user names (for
+   example `GEMINI.md`, `.cursor/rules/`, `.github/copilot-instructions.md`).
+   Resolve symlinks; files that resolve to the same file count as one target.
+   Always edit the resolved target; never replace a symlink with a file.
+2. If the marker `<!-- docs-todo -->` is present in **any** standard candidate
+   (`AGENTS.md`, `CLAUDE.md`, `.claude/CLAUDE.md`), continue with the task.
+   Ask nothing.
+3. Otherwise ask once per skill per session, as a **multi-select** question:
+   "Which agent guidance files should get the `docs-todo` pointer?" Options:
+   `AGENTS.md`, `CLAUDE.md`, `Others`, `Not now`. Say in each option's
+   description whether the file exists, will be created, or is an alias of
+   another candidate (e.g. "also `.claude/CLAUDE.md`"). `Others` means the
+   user names the paths in free text. Use `AskUserQuestion` with
+   `multiSelect: true` when the host provides it; otherwise ask in one plain
+   sentence listing the same choices and wait. Selecting *Not now* together
+   with files means *Not now*.
+4. On insert, for every selected target: follow
+   [references/agents-md-section.md](references/agents-md-section.md). In the
+   resolved target file (created if it does not exist), create the
    `<!-- docs-skills:start -->`…`<!-- docs-skills:end -->` section if absent,
-   then add this skill's marker and row inside it. Never insert twice. If
-   the chosen file is a copy of another candidate (identical content), say so
-   and insert into both so they stay identical.
+   then add this skill's marker and rows inside it. Never insert twice into
+   one file. If a selected file is an identical copy of an unselected
+   candidate, say so and insert into both so they stay identical.
 5. On *Not now*: leave every guidance file untouched, say so once and
    continue; ask again only in a new session. Users who never want it add the
    marker by hand.
