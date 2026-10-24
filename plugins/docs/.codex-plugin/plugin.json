@@ -1,0 +1,36 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "description": "Docs conventions for a project: a per-day changelog journal, one-file-per-item todos, and a feature registry with MADR ADRs, design docs and plan conversion, plus their CI checks.",
+  "author": {
+    "name": "Bassel Al-Sayed",
+    "url": "https://github.com/basselalsayed"
+  },
+  "homepage": "https://github.com/basselalsayed/skills",
+  "repository": "https://github.com/basselalsayed/skills",
+  "license": "MIT",
+  "keywords": [
+    "docs",
+    "changelog",
+    "todo",
+    "adr",
+    "feature-registry",
+    "codex",
+    "claude-code"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Docs Conventions",
+    "shortDescription": "Changelog, todos and a feature registry under docs/",
+    "longDescription": "Keeps a project's docs/ honest: a per-day changelog entry for every commit, one committed file per deferred item, and a feature registry with MADR ADRs and design docs that approved plans are converted into before implementation. Ships the checks CI runs.",
+    "developerName": "Bassel Al-Sayed",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Changelog journal",
+      "Todo tracking",
+      "Feature registry and ADRs"
+    ],
+    "websiteURL": "https://github.com/basselalsayed/skills",
+    "defaultPrompt": "Use the docs skills to record this change in docs/."
+  }
+}

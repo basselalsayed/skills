@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docs: Features"
+  short_description: "Feature registry, ADRs and plan conversion under docs/"
+  default_prompt: "Use $docs-features to convert this approved plan into docs before implementing it."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docs: Todos"
+  short_description: "Record deferred work as committed files in docs/todos"
+  default_prompt: "Use $docs-todo to record this deferred item."

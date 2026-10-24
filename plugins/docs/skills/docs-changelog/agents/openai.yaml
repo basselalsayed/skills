@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docs: Changelog"
+  short_description: "Append a per-day changelog entry to every commit"
+  default_prompt: "Use $docs-changelog to add today's changelog entry for this commit."

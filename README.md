@@ -48,7 +48,7 @@ skills/
 ├── .agents/plugins/
 │   └── marketplace.json   # Codex marketplace catalog
 ├── .claude-plugin/
-│   ├── marketplace.json   # marketplace listing the bundle plugin
+│   ├── marketplace.json   # marketplace listing the bundle and docs plugins
 │   └── plugin.json        # Claude Code plugin manifest
 ├── .codex-plugin/
 │   └── plugin.json        # Codex plugin manifest
@@ -59,8 +59,9 @@ skills/
 ├── skills/
 │   └── <skill-name>/
 │       └── SKILL.md       # one folder per skill
+├── plugins/docs/          # the docs plugin (own manifests + skills/)
 └── scripts/
-    └── sync-skills.mjs    # regenerates skills[] from skills/
+    └── sync-skills.mjs    # regenerates skills[] from skills/ and plugins/*/skills/
 ```
 
 The `skills/<name>/SKILL.md` layout is shared by Claude Code, Codex, and
@@ -95,6 +96,38 @@ Claude Code definitions live in the plugin-root `agents/` directory and are
 listed in both Claude manifests. Codex definitions live in `.codex/agents/`.
 Each skill also carries `agents/openai.yaml`, which provides Codex UI metadata
 for that skill.
+
+## Docs plugin
+
+`plugins/docs/` is a second plugin, `docs`, separate from the root `skills`
+bundle. Its three skills keep a project's `docs/` directory honest:
+
+| Skill | What it does |
+| --- | --- |
+| `docs-changelog` | Per-day engineering journal: every commit appends an entry to `docs/changelog/DD-MM-YYYY.md`. Ships `scripts/check-changelog.mjs` (with `--self-test`). |
+| `docs-todo` | Deferred work as one committed file per item in `docs/todos/`, deleted when shipped. |
+| `docs-features` | Feature registry, feature docs (current vs proposed), MADR ADRs, design docs, and conversion of approved plans into them. Ships `scripts/check-docs.mjs`. |
+
+On first use each skill asks before adding its row to a shared `## Docs`
+section in `AGENTS.md` / `CLAUDE.md`; markers keep that idempotent.
+
+For a project, vendor the skills so CI can run their scripts:
+
+```sh
+npx skills add basselalsayed/skills --skill docs-changelog -a claude-code
+npx skills add basselalsayed/skills --skill docs-todo -a claude-code
+npx skills add basselalsayed/skills --skill docs-features -a claude-code
+```
+
+For personal use in Claude Code:
+
+```
+/plugin marketplace add basselalsayed/skills
+/plugin install docs@skills
+```
+
+The skills are then invoked as `/docs:docs-<name>`. A plugin-cache install is
+not a stable path for CI; vendor instead.
 
 ## Add a new skill
 

@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Bassel Al-Sayed's shareable Claude Code skills and developer/reviewer agents.",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "plugins": [
     {
@@ -39,6 +39,17 @@
         "./agents/backend-reviewer.md",
         "./agents/frontend-developer.md",
         "./agents/frontend-reviewer.md"
+      ]
+    },
+    {
+      "name": "docs",
+      "source": "./plugins/docs",
+      "description": "Docs conventions for a project: a per-day changelog journal, one-file-per-item todos, and a feature registry with MADR ADRs, design docs and plan conversion, plus their CI checks.",
+      "category": "productivity",
+      "skills": [
+        "./skills/docs-changelog",
+        "./skills/docs-features",
+        "./skills/docs-todo"
       ]
     }
   ]
